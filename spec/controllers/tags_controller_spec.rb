@@ -3,9 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe TagsController, type: :controller do
-  let(:valid_attributes) do
+  let(:title) { 'Today' }
+  let(:valid_params) do
     {
-      title: 'Today'
+      data: {
+        id: '1',
+        type: 'tags',
+        attributes: {
+          title: title
+        }
+      }
     }
   end
 
@@ -14,12 +21,12 @@ RSpec.describe TagsController, type: :controller do
       id: '1',
       type: 'tags',
       attributes: {
-        title: 'Today'
+        title: title
       }
     }
   end
 
-  let(:invalid_attributes) do
+  let(:invalid_params) do
     skip('Add a hash of attributes invalid for your model')
   end
 
@@ -27,7 +34,8 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'GET #index' do
     it 'returns all the tags created' do
-      Tag.create! valid_attributes
+      FactoryBot.create(:tag)
+
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
       expected_response = {
@@ -39,7 +47,8 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns a success response' do
-      tag = Tag.create! valid_attributes
+      tag = FactoryBot.create(:tag)
+
       get :show, params: { id: tag.to_param }, session: valid_session
       expect(response).to be_successful
       expected_response = {
@@ -53,12 +62,12 @@ RSpec.describe TagsController, type: :controller do
     context 'with valid params' do
       it 'creates a new Tag' do
         expect do
-          post :create, params: { tag: valid_attributes }, session: valid_session
+          post :create, params: valid_params, session: valid_session
         end.to change(Tag, :count).by(1)
       end
 
       it 'renders a JSON response with the new tag' do
-        post :create, params: { tag: valid_attributes }, session: valid_session
+        post :create, params: valid_params, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(tag_url(Tag.last))
@@ -71,7 +80,7 @@ RSpec.describe TagsController, type: :controller do
 
     context 'with invalid params' do
       it 'renders a JSON response with errors for the new tag' do
-        post :create, params: { tag: invalid_attributes }, session: valid_session
+        post :create, params: invalid_params, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -81,23 +90,31 @@ RSpec.describe TagsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       let(:updated_title) { 'Updated Tag Title' }
-      let(:new_attributes) do
-        {
-          title: updated_title
-        }
-      end
 
       it 'updates the requested tag' do
-        tag = Tag.create! valid_attributes
-        put :update, params: { id: tag.to_param, tag: new_attributes }, session: valid_session
+        tag = FactoryBot.create(:tag)
+        update_params = {
+          data: {
+            id: tag.to_param,
+            type: 'tags',
+            attributes: {
+              title: updated_title
+            }
+          }
+        }
+        put :update,
+            params: { id: tag.to_param }.merge(update_params),
+            session: valid_session
         tag.reload
         expect(tag.title).to eq(updated_title)
       end
 
       it 'renders a JSON response with the tag' do
-        tag = Tag.create! valid_attributes
+        tag = FactoryBot.create(:tag)
 
-        put :update, params: { id: tag.to_param, tag: valid_attributes }, session: valid_session
+        put :update,
+            params: { id: tag.to_param }.merge(valid_params),
+            session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
         expected_response = {
@@ -109,9 +126,11 @@ RSpec.describe TagsController, type: :controller do
 
     context 'with invalid params' do
       it 'renders a JSON response with errors for the tag' do
-        tag = Tag.create! valid_attributes
+        tag = FactoryBot.create(:tag)
 
-        put :update, params: { id: tag.to_param, tag: invalid_attributes }, session: valid_session
+        put :update,
+            params: { id: tag.to_param }.merge(invalid_params),
+            session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -120,7 +139,8 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the requested tag' do
-      tag = Tag.create! valid_attributes
+      tag = FactoryBot.create(:tag)
+
       expect do
         delete :destroy, params: { id: tag.to_param }, session: valid_session
       end.to change(Tag, :count).by(-1)

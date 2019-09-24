@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class TagsController < ApplicationController
-  before_action :set_tag, only: [:show, :update, :destroy]
+  before_action :set_tag, only: %i[show update destroy]
 
   # GET /tags
   def index
@@ -39,13 +41,15 @@ class TagsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tag
-      @tag = Tag.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def tag_params
-      params.require(:tag).permit(:title)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_tag
+    @tag = Tag.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def tag_params
+    ActiveModelSerializers::Deserialization
+      .jsonapi_parse!(params, only: [:title])
+  end
 end
