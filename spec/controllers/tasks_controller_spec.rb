@@ -4,7 +4,19 @@ require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
   let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+    {
+      title: 'Wash Laundry'
+    }
+  end
+
+  let(:task_body) do
+    {
+      id: '1',
+      type: 'tasks',
+      attributes: {
+        title: 'Wash Laundry'
+      }
+    }
   end
 
   let(:invalid_attributes) do
@@ -14,18 +26,28 @@ RSpec.describe TasksController, type: :controller do
   let(:valid_session) { {} }
 
   describe 'GET #index' do
-    it 'returns a success response' do
-      _task = Task.create! valid_attributes
+    it 'returns all tasks' do
+      Task.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
+      expected_body = {
+        data: [
+          task_body
+        ]
+      }
+      expect(response.body).to eq(expected_body.to_json)
     end
   end
 
   describe 'GET #show' do
-    it 'returns a success response' do
+    it 'returns the task at that id' do
       task = Task.create! valid_attributes
       get :show, params: { id: task.to_param }, session: valid_session
       expect(response).to be_successful
+      expected_body = {
+        data: task_body
+      }
+      expect(response.body).to eq(expected_body.to_json)
     end
   end
 
@@ -46,6 +68,10 @@ RSpec.describe TasksController, type: :controller do
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(task_url(Task.last))
+        expected_body = {
+          data: task_body
+        }
+        expect(response.body).to eq(expected_body.to_json)
       end
     end
 
@@ -62,8 +88,11 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
+      let(:updated_title) { 'Updated Task Title' }
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        {
+          title: updated_title
+        }
       end
 
       it 'updates the requested task' do
@@ -72,7 +101,7 @@ RSpec.describe TasksController, type: :controller do
             params: { id: task.to_param, task: new_attributes },
             session: valid_session
         task.reload
-        skip('Add assertions for updated state')
+        expect(task.title).to eq(updated_title)
       end
 
       it 'renders a JSON response with the task' do
@@ -83,6 +112,10 @@ RSpec.describe TasksController, type: :controller do
             session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
+        expected_body = {
+          data: task_body
+        }
+        expect(response.body).to eq(expected_body.to_json)
       end
     end
 
