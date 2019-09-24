@@ -35,5 +35,13 @@ module TodoApiApp
     config.api_only = true
     ActiveModel::Serializer.config.adapter = :json_api
     ActiveModelSerializers.config.key_transform = :underscore
+
+    config.generators do |g|
+      g.hidden_namespaces << :test_unit << :erb
+      g.test_framework :rspec,
+                       request_specs: true
+      g.integration_tool :rspec
+      g.system_tests :rspec
+    end
   end
 end
