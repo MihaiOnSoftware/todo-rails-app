@@ -31,9 +31,7 @@ RSpec.describe TasksController, type: :controller do
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
       expected_body = {
-        data: [
-          task_body
-        ]
+        data: [task_body]
       }
       expect(response.body).to eq(expected_body.to_json)
     end
