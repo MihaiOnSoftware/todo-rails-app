@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "tasks",
+      "attributes": {
+        "title": "Wash Laundry"
+      }
+    },
+    {
+      "id": "2",
+      "type": "tasks",
+      "attributes": {
+        "title": "Do Homework"
+      }
+    }
+  ]
+}
