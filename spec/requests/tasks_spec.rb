@@ -34,7 +34,8 @@ RSpec.describe 'Tasks', type: :request do
       expect(response).to have_http_status(200)
 
       get task_path(task.id)
-      updated_title_show = read_json_file('tasks/updated_title_show.json').to_json
+      updated_title_show =
+        read_json_file('tasks/updated_title_show.json').to_json
       expect(response.body).to eq(updated_title_show)
     end
   end
