@@ -28,7 +28,7 @@ class TagsController < ApplicationController
 
   # PATCH/PUT /tags/1
   def update
-    if @tag.update(tag_params)
+    if rename_tag.perform(tag_params).success?
       render json: @tag, include: ['tasks']
     else
       render json: @tag.errors, status: :unprocessable_entity
@@ -51,5 +51,13 @@ class TagsController < ApplicationController
   def tag_params
     ActiveModelSerializers::Deserialization
       .jsonapi_parse!(params, only: [:title])
+  end
+
+  def repository
+    @repository ||= Database::TagRepositoryDatabase.new(@tag)
+  end
+
+  def rename_tag
+    RenameTag.new(repository)
   end
 end

@@ -133,20 +133,22 @@ RSpec.describe TagsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       let(:updated_title) { 'Updated Tag Title' }
-
-      it 'updates the requested tag' do
-        tag = FactoryBot.create(:tag, :with_task)
-        update_params = {
+      let(:update_params) do
+        {
           data: {
-            id: tag.to_param,
+            id: '1',
             type: 'tags',
             attributes: {
               title: updated_title
             }
           }
         }
+      end
+
+      it 'updates the requested tag' do
+        tag = FactoryBot.create(:tag, :with_task)
         put :update,
-            params: { id: tag.to_param }.merge(update_params),
+            params: { id: '1' }.merge(update_params),
             session: valid_session
         tag.reload
         expect(tag.title).to eq(updated_title)
@@ -156,10 +158,11 @@ RSpec.describe TagsController, type: :controller do
         tag = FactoryBot.create(:tag, :with_task)
 
         put :update,
-            params: { id: tag.to_param }.merge(valid_params),
+            params: { id: '1' }.merge(update_params),
             session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
+        single_tag_body[:data][:attributes][:title] = updated_title
         expect(response.body).to eq(single_tag_body.to_json)
       end
     end

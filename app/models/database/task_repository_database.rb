@@ -23,8 +23,8 @@ module Database
         @task_record.save!
       end
       SuccessResult.new(task)
-    rescue ActiveRecord::ActiveRecordError
-      FailureResult.new('Something went wrong')
+    rescue ActiveRecord::ActiveRecordError => e
+      FailureResult.new(e)
     end
 
     private

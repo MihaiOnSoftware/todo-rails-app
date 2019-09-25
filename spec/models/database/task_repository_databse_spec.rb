@@ -59,7 +59,7 @@ RSpec.describe Database::TaskRepositoryDatabase do
       expect(result).to eq(task_to_store)
     end
 
-    it 'stores the task' do
+    it 'stores the updated task' do
       database.store(task_to_store)
       task_record.reload
 
@@ -71,6 +71,13 @@ RSpec.describe Database::TaskRepositoryDatabase do
       task_record.reload
 
       expect(task_record.tags.to_a).to eq([tag_record])
+    end
+
+    it 'will return a failure if storage fails' do
+      exception = ActiveRecord::ActiveRecordError.new("oops")
+      task_record.stub(:save!).and_raise(exception)
+      failure = database.store(task_to_store).failure
+      expect(failure).to eq(exception)
     end
   end
 end
