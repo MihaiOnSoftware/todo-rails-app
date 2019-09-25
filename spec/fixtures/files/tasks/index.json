@@ -24,6 +24,16 @@
       "type": "tags",
       "attributes": {
         "title": "Today"
+      },
+      "relationships": {
+        "tasks": {
+          "data": [
+            {
+              "id": "1",
+              "type": "tasks"
+            }
+          ]
+        }
       }
     }
   ]

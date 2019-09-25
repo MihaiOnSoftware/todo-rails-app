@@ -5,6 +5,11 @@
       "type": "tags",
       "attributes": {
         "title": "Today"
+      },
+      "relationships": {
+        "tasks": {
+          "data": []
+        }
       }
     },
     {
@@ -12,6 +17,11 @@
       "type": "tags",
       "attributes": {
         "title": "Someday"
+      },
+      "relationships": {
+        "tasks": {
+          "data": []
+        }
       }
     }
   ]

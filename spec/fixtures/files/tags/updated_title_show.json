@@ -4,6 +4,11 @@
     "type": "tags",
     "attributes": {
       "title": "Updated Tag Title"
+    },
+    "relationships": {
+      "tasks": {
+        "data": []
+      }
     }
   }
 }

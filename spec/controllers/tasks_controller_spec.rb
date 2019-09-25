@@ -29,6 +29,14 @@ RSpec.describe TasksController, type: :controller do
       type: 'tags',
       attributes: {
         title: 'Today'
+      },
+      relationships: {
+        tasks: {
+          data: [{
+            id: '1',
+            type: 'tasks'
+          }]
+        }
       }
     }
   end

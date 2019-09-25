@@ -5,6 +5,11 @@
       "type": "tags",
       "attributes": {
         "title": "Today"
+      },
+      "relationships": {
+        "tasks": {
+          "data": []
+        }
       }
     }
   ]

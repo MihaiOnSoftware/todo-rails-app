@@ -22,6 +22,11 @@ RSpec.describe TagsController, type: :controller do
       type: 'tags',
       attributes: {
         title: title
+      },
+      relationships: {
+        tasks: {
+          data: []
+        }
       }
     }
   end
