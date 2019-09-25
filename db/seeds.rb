@@ -7,3 +7,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+today_tag = Tag.create(title: 'Today')
+laundry_task = Task.create(title: 'Wash laundry')
+laundry_task.tags << today_tag
