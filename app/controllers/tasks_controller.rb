@@ -28,7 +28,7 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   def update
-    if @task.update(task_params)
+    if RenameTask.new(repository).perform(task_params).success?
       render json: @task, include: ['tags']
     else
       render json: @task.errors, status: :unprocessable_entity
@@ -51,5 +51,9 @@ class TasksController < ApplicationController
   def task_params
     ActiveModelSerializers::Deserialization
       .jsonapi_parse!(params, only: [:title])
+  end
+
+  def repository
+    @repository ||= Database::TaskRepositoryDatabase.new(@task)
   end
 end
