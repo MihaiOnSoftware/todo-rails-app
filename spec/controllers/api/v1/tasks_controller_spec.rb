@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe TasksController, type: :controller do
+RSpec.describe Api::V1::TasksController, type: :controller do
   let(:title) { 'Wash Laundry' }
 
   let(:task_body) do
@@ -104,7 +104,7 @@ RSpec.describe TasksController, type: :controller do
              session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(task_url(Task.last))
+        expect(response.location).to eq(api_v1_task_path(Task.last))
         post_response = {
           data: {
             id: '1',

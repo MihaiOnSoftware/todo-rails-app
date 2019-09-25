@@ -2,30 +2,30 @@
 
 require 'rails_helper'
 
-RSpec.describe TagsController, type: :routing do
+RSpec.describe Api::V1::TagsController, type: :routing do
   describe 'routing' do
     it 'routes to #index' do
-      expect(get: '/tags').to route_to('tags#index')
+      expect(get: 'api/v1/tags').to route_to('api/v1/tags#index')
     end
 
     it 'routes to #show' do
-      expect(get: '/tags/1').to route_to('tags#show', id: '1')
+      expect(get: 'api/v1/tags/1').to route_to('api/v1/tags#show', id: '1')
     end
 
     it 'routes to #create' do
-      expect(post: '/tags').to route_to('tags#create')
+      expect(post: 'api/v1/tags').to route_to('api/v1/tags#create')
     end
 
     it 'routes to #update via PUT' do
-      expect(put: '/tags/1').to route_to('tags#update', id: '1')
+      expect(put: 'api/v1/tags/1').to route_to('api/v1/tags#update', id: '1')
     end
 
     it 'routes to #update via PATCH' do
-      expect(patch: '/tags/1').to route_to('tags#update', id: '1')
+      expect(patch: 'api/v1/tags/1').to route_to('api/v1/tags#update', id: '1')
     end
 
     it 'routes to #destroy' do
-      expect(delete: '/tags/1').to route_to('tags#destroy', id: '1')
+      expect(delete: 'api/v1/tags/1').to route_to('api/v1/tags#destroy', id: '1')
     end
   end
 end

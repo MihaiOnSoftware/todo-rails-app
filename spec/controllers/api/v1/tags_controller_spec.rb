@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe TagsController, type: :controller do
+RSpec.describe Api::V1::TagsController, type: :controller do
   let(:title) { 'Today' }
   let(:valid_params) do
     {
@@ -113,7 +113,7 @@ RSpec.describe TagsController, type: :controller do
         post :create, params: valid_params, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(tag_url(Tag.last))
+        expect(response.location).to eq(api_v1_tag_path(Tag.last))
         expected_response = {
           data: tag_body.merge(no_tasks)
         }
