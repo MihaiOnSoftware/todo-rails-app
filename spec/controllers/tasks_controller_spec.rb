@@ -11,7 +11,32 @@ RSpec.describe TasksController, type: :controller do
       type: 'tasks',
       attributes: {
         title: title
+      },
+      relationships: {
+        tags: {
+          data: [{
+            id: '1',
+            type: 'tags'
+          }]
+        }
       }
+    }
+  end
+
+  let(:tag_body) do
+    {
+      id: '1',
+      type: 'tags',
+      attributes: {
+        title: 'Today'
+      }
+    }
+  end
+
+  let(:single_task_response) do
+    {
+      data: task_body,
+      included: [tag_body]
     }
   end
 
@@ -39,7 +64,8 @@ RSpec.describe TasksController, type: :controller do
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
       expected_body = {
-        data: [task_body]
+        data: [task_body],
+        included: [tag_body]
       }
       expect(response.body).to eq(expected_body.to_json)
     end
@@ -50,10 +76,7 @@ RSpec.describe TasksController, type: :controller do
       task = FactoryBot.create(:task)
       get :show, params: { id: task.to_param }, session: valid_session
       expect(response).to be_successful
-      expected_body = {
-        data: task_body
-      }
-      expect(response.body).to eq(expected_body.to_json)
+      expect(response.body).to eq(single_task_response.to_json)
     end
   end
 
@@ -74,10 +97,22 @@ RSpec.describe TasksController, type: :controller do
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(task_url(Task.last))
-        expected_body = {
-          data: task_body
+        post_response = {
+          data: {
+            id: '1',
+            type: 'tasks',
+            attributes: {
+              title: title
+            },
+            relationships: {
+              tags: {
+                data: []
+              }
+            }
+          }
         }
-        expect(response.body).to eq(expected_body.to_json)
+
+        expect(response.body).to eq(post_response.to_json)
       end
     end
 
@@ -121,10 +156,7 @@ RSpec.describe TasksController, type: :controller do
             session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
-        expected_body = {
-          data: task_body
-        }
-        expect(response.body).to eq(expected_body.to_json)
+        expect(response.body).to eq(single_task_response.to_json)
       end
     end
 

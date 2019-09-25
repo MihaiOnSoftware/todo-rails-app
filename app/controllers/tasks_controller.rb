@@ -7,12 +7,12 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all
 
-    render json: @tasks
+    render json: @tasks, include: ['tags']
   end
 
   # GET /tasks/1
   def show
-    render json: @task
+    render json: @task, include: ['tags']
   end
 
   # POST /tasks
@@ -20,7 +20,7 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
-      render json: @task, status: :created, location: @task
+      render json: @task, include: ['tags'], status: :created, location: @task
     else
       render json: @task.errors, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   def update
     if @task.update(task_params)
-      render json: @task
+      render json: @task, include: ['tags']
     else
       render json: @task.errors, status: :unprocessable_entity
     end

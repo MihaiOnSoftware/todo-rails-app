@@ -4,6 +4,25 @@
         "type": "tasks",
         "attributes": {
             "title": "Updated Task Title"
+        },
+        "relationships": {
+            "tags": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "tags"
+                    }
+                ]
+            }
         }
-    }
+    },
+    "included": [
+        {
+            "id": "1",
+            "type": "tags",
+            "attributes": {
+                "title": "Today"
+            }
+        }
+    ]
 }
