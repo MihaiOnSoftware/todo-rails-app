@@ -17,9 +17,9 @@ class TagsController < ApplicationController
 
   # POST /tags
   def create
-    @tag = Tag.new(tag_params)
+    @tag = Tag.new
 
-    if @tag.save
+    if rename_tag.perform(tag_params).success?
       render json: @tag, include: ['tasks'], status: :created, location: @tag
     else
       render json: @tag.errors, status: :unprocessable_entity
