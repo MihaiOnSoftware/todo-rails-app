@@ -1,0 +1,80 @@
+{
+    "data": {
+        "id": "1",
+        "type": "tasks",
+        "attributes": {
+            "title": "Wash Laundry"
+        },
+        "relationships": {
+            "tags": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "tags"
+                    },
+                    {
+                        "id": "2",
+                        "type": "tags"
+                    },
+                    {
+                        "id": "3",
+                        "type": "tags"
+                    }
+                ]
+            }
+        }
+    },
+    "included": [
+        {
+            "id": "1",
+            "type": "tags",
+            "attributes": {
+                "title": "Today"
+            },
+            "relationships": {
+              "tasks": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "tasks"
+                    }
+                ]
+              }
+            }
+        },
+        {
+            "id": "2",
+            "type": "tags",
+            "attributes": {
+                "title": "Home"
+            },
+            "relationships": {
+              "tasks": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "tasks"
+                    }
+                ]
+              }
+            }
+        },
+        {
+            "id": "3",
+            "type": "tags",
+            "attributes": {
+                "title": "Urgent"
+            },
+            "relationships": {
+              "tasks": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "tasks"
+                    }
+                ]
+              }
+            }
+        }
+    ]
+}

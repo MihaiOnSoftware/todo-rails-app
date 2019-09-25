@@ -28,7 +28,10 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   def update
-    if RenameTask.new(repository).perform(task_params).success?
+    result = rename_task.perform(title: task_params[:title]).map do
+      tag_task.perform(tag_titles: task_params[:tags])
+    end
+    if result.success?
       render json: @task, include: ['tags']
     else
       render json: @task.errors, status: :unprocessable_entity
@@ -50,10 +53,18 @@ class TasksController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def task_params
     ActiveModelSerializers::Deserialization
-      .jsonapi_parse!(params, only: [:title])
+      .jsonapi_parse!(params, only: %i[title tags])
   end
 
   def repository
     @repository ||= Database::TaskRepositoryDatabase.new(@task)
+  end
+
+  def rename_task
+    RenameTask.new(repository)
+  end
+
+  def tag_task
+    TagTask.new(repository)
   end
 end

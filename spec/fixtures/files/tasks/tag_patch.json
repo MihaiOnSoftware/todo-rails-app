@@ -1,0 +1,9 @@
+{
+    "data": {
+        "type": "tasks",
+        "id": "1",
+        "attributes": {
+            "tags": ["Urgent", "Home"]
+        }
+    }
+}

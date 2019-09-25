@@ -9,6 +9,8 @@ class RenameTask
 
   def perform(title:)
     task = repository.task
+    return SuccessResult.new(task) unless title
+
     repository.store(task.merge(title: title))
   end
 end
