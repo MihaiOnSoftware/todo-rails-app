@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Tags', type: :request do
   describe 'POST /tags' do
     it 'Posting will show the changes in the index' do
-      FactoryBot.create(:tag)
+      FactoryBot.create(:tag, :with_task)
 
       get tags_path
       initial_index = read_json_file('tags/index.json').to_json
@@ -23,7 +23,7 @@ RSpec.describe 'Tags', type: :request do
 
   describe 'PATCH /tags/1' do
     it 'Patching the title will change the show value' do
-      task = FactoryBot.create(:tag)
+      task = FactoryBot.create(:tag, :with_task)
 
       get tag_path(task.id)
       initial_show = read_json_file('tags/show.json').to_json

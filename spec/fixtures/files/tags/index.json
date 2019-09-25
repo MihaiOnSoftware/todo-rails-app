@@ -8,7 +8,31 @@
       },
       "relationships": {
         "tasks": {
-          "data": []
+          "data": [
+            {
+              "id": "1",
+              "type": "tasks"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "1",
+      "type": "tasks",
+      "attributes": {
+        "title": "Wash Laundry"
+      },
+      "relationships": {
+        "tags": {
+          "data": [
+            {
+              "id": "1",
+              "type": "tags"
+            }
+          ]
         }
       }
     }

@@ -25,9 +25,49 @@ RSpec.describe TagsController, type: :controller do
       },
       relationships: {
         tasks: {
+          data: [
+            {
+              id: '1',
+              type: 'tasks'
+            }
+          ]
+        }
+      }
+    }
+  end
+
+  let(:no_tasks) do
+    {
+      relationships: {
+        tasks: {
           data: []
         }
       }
+    }
+  end
+
+  let(:task_body) do
+    {
+      id: '1',
+      type: 'tasks',
+      attributes: {
+        title: 'Wash Laundry'
+      },
+      relationships: {
+        tags: {
+          data: [{
+            id: '1',
+            type: 'tags'
+          }]
+        }
+      }
+    }
+  end
+
+  let(:single_tag_body) do
+    {
+      data: tag_body,
+      included: [task_body]
     }
   end
 
@@ -39,12 +79,13 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'GET #index' do
     it 'returns all the tags created' do
-      FactoryBot.create(:tag)
+      FactoryBot.create(:tag, :with_task)
 
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
       expected_response = {
-        data: [tag_body]
+        data: [tag_body],
+        included: [task_body]
       }
       expect(response.body).to eq(expected_response.to_json)
     end
@@ -52,14 +93,11 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns a success response' do
-      tag = FactoryBot.create(:tag)
+      tag = FactoryBot.create(:tag, :with_task)
 
       get :show, params: { id: tag.to_param }, session: valid_session
       expect(response).to be_successful
-      expected_response = {
-        data: tag_body
-      }
-      expect(response.body).to eq(expected_response.to_json)
+      expect(response.body).to eq(single_tag_body.to_json)
     end
   end
 
@@ -77,7 +115,7 @@ RSpec.describe TagsController, type: :controller do
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(tag_url(Tag.last))
         expected_response = {
-          data: tag_body
+          data: tag_body.merge(no_tasks)
         }
         expect(response.body).to eq(expected_response.to_json)
       end
@@ -97,7 +135,7 @@ RSpec.describe TagsController, type: :controller do
       let(:updated_title) { 'Updated Tag Title' }
 
       it 'updates the requested tag' do
-        tag = FactoryBot.create(:tag)
+        tag = FactoryBot.create(:tag, :with_task)
         update_params = {
           data: {
             id: tag.to_param,
@@ -115,23 +153,20 @@ RSpec.describe TagsController, type: :controller do
       end
 
       it 'renders a JSON response with the tag' do
-        tag = FactoryBot.create(:tag)
+        tag = FactoryBot.create(:tag, :with_task)
 
         put :update,
             params: { id: tag.to_param }.merge(valid_params),
             session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
-        expected_response = {
-          data: tag_body
-        }
-        expect(response.body).to eq(expected_response.to_json)
+        expect(response.body).to eq(single_tag_body.to_json)
       end
     end
 
     context 'with invalid params' do
       it 'renders a JSON response with errors for the tag' do
-        tag = FactoryBot.create(:tag)
+        tag = FactoryBot.create(:tag, :with_task)
 
         put :update,
             params: { id: tag.to_param }.merge(invalid_params),
@@ -144,7 +179,7 @@ RSpec.describe TagsController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the requested tag' do
-      tag = FactoryBot.create(:tag)
+      tag = FactoryBot.create(:tag, :with_task)
 
       expect do
         delete :destroy, params: { id: tag.to_param }, session: valid_session

@@ -7,12 +7,12 @@ class TagsController < ApplicationController
   def index
     @tags = Tag.all
 
-    render json: @tags
+    render json: @tags, include: ['tasks']
   end
 
   # GET /tags/1
   def show
-    render json: @tag
+    render json: @tag, include: ['tasks']
   end
 
   # POST /tags
@@ -20,7 +20,7 @@ class TagsController < ApplicationController
     @tag = Tag.new(tag_params)
 
     if @tag.save
-      render json: @tag, status: :created, location: @tag
+      render json: @tag, include: ['tasks'], status: :created, location: @tag
     else
       render json: @tag.errors, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class TagsController < ApplicationController
   # PATCH/PUT /tags/1
   def update
     if @tag.update(tag_params)
-      render json: @tag
+      render json: @tag, include: ['tasks']
     else
       render json: @tag.errors, status: :unprocessable_entity
     end

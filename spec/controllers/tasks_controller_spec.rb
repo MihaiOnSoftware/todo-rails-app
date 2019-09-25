@@ -68,7 +68,7 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'GET #index' do
     it 'returns all tasks' do
-      FactoryBot.create(:task)
+      FactoryBot.create(:task, :with_tag)
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
       expected_body = {
@@ -81,7 +81,7 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'GET #show' do
     it 'returns the task at that id' do
-      task = FactoryBot.create(:task)
+      task = FactoryBot.create(:task, :with_tag)
       get :show, params: { id: task.to_param }, session: valid_session
       expect(response).to be_successful
       expect(response.body).to eq(single_task_response.to_json)
@@ -140,7 +140,7 @@ RSpec.describe TasksController, type: :controller do
       let(:updated_title) { 'Updated Task Title' }
 
       it 'updates the requested task' do
-        task = FactoryBot.create(:task)
+        task = FactoryBot.create(:task, :with_tag)
         update_params = {
           data: {
             id: task.to_param,
@@ -158,7 +158,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       it 'renders a JSON response with the task' do
-        task = FactoryBot.create(:task)
+        task = FactoryBot.create(:task, :with_tag)
         put :update,
             params: { id: task.to_param }.merge(valid_params),
             session: valid_session
@@ -170,7 +170,7 @@ RSpec.describe TasksController, type: :controller do
 
     context 'with invalid params' do
       it 'renders a JSON response with errors for the task' do
-        FactoryBot.create(:task)
+        FactoryBot.create(:task, :with_tag)
 
         put :update,
             params: invalid_params,
@@ -183,7 +183,7 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the requested task' do
-      task = FactoryBot.create(:task)
+      task = FactoryBot.create(:task, :with_tag)
       expect do
         delete :destroy,
                params: { id: task.to_param },
