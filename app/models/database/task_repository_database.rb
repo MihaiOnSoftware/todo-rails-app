@@ -16,6 +16,19 @@ module Database
       task_record_to_task(@task_record)
     end
 
+    def create_tags(titles)
+      tag_records = []
+      unless titles.empty?
+        Tag.transaction do
+          tag_records = Tag.create!(titles.map { |t| { title: t } })
+        end
+      end
+      tags = tag_records.map { |t| t.attributes.deep_symbolize_keys }
+      SuccessResult.new(tags)
+    rescue ActiveRecord::ActiveRecordError => e
+      FailureResult.new(e)
+    end
+
     def store(task)
       @task_record.transaction do
         @task_record.attributes = task.except(:tags)

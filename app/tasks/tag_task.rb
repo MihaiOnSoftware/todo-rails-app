@@ -21,11 +21,10 @@ class TagTask
     new_tags = repository.tags(new_tag_titles)
     missing_tags = new_tag_titles - titles(new_tags)
 
-    unless missing_tags.empty?
-      return FailureResult.new("The following tags don't exist: #{missing_tags}")
+    repository.create_tags(missing_tags).flat_map do |created_tags|
+      tags = (created_tags + new_tags) + existing_tags(task)
+      repository.store(task.merge(tags: tags))
     end
-
-    repository.store(task.merge(tags: new_tags + existing_tags(task)))
   end
 
   def tag_titles_present(tag_titles)

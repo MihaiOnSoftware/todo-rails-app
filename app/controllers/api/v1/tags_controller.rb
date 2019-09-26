@@ -23,9 +23,9 @@ module Api
 
         if rename_tag.perform(tag_params).success?
           render(
-            json: @tag, 
-            include: ['tasks'], 
-            status: :created, 
+            json: @tag,
+            include: ['tasks'],
+            status: :created,
             location: api_v1_tag_path(@tag)
           )
         else

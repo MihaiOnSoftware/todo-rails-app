@@ -9,6 +9,10 @@ class TaskRepository
     nil
   end
 
+  def create_tags(_tag_titles)
+    SuccessResult.new([])
+  end
+
   def store(task)
     SuccessResult.new(task)
   end
