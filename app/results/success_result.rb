@@ -15,6 +15,15 @@ class SuccessResult < Result
     SuccessResult.new(yield value)
   end
 
+  def flat_map(&map)
+    result = map.call(value)
+    unless result.is_a?(Result)
+      raise ArgumentError, 'flat map can only be used if returning another Result'
+    end
+
+    result
+  end
+
   def value_or_else(&_or_else)
     value
   end

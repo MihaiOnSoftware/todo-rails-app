@@ -9,6 +9,10 @@ class Result
     self
   end
 
+  def flat_map(&_block)
+    self
+  end
+
   def value_or_else(&_or_else)
     nil
   end

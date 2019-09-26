@@ -12,6 +12,11 @@ RSpec.describe Result do
     expect(result.map { |i| i + 1 }).to be(result)
   end
 
+  it 'will not flat map' do
+    result = Result.new
+    expect(result.flat_map { Result.new }).to be(result)
+  end
+
   it 'will return nil on value_or_else' do
     result = Result.new
     expect(result.value_or_else { |e| e }).to be_nil

@@ -16,6 +16,21 @@ RSpec.describe SuccessResult do
     expect(result.map { |i| i + 1 }).to eq(SuccessResult.new(2))
   end
 
+  it 'will flat map into a SuccessResult' do
+    result = SuccessResult.new(1)
+    expect(result.flat_map { |i| SuccessResult.new(i + 1) }).to eq(SuccessResult.new(2))
+  end
+
+  it 'will flat map into a FailureResult' do
+    result = SuccessResult.new(1)
+    expect(result.flat_map { |i| FailureResult.new(i + 1) }).to eq(FailureResult.new(2))
+  end
+
+  it 'will error on flat map into a non-Result' do
+    result = SuccessResult.new(1)
+    expect { result.flat_map { |i| i + 1 } }.to raise_error(ArgumentError)
+  end
+
   it 'will equal another success result with the same value' do
     result1 = SuccessResult.new(1)
     result2 = SuccessResult.new(1)
